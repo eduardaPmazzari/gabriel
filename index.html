@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eduarda & Gabriel — Nosso Cantinho Romântico</title>
+  
+  <!-- Fontes do Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Poppins:wght@300;400;600;700&family=Sacramento&display=swap" rel="stylesheet">
+  
+  <!-- CSS Embutido -->
+  <style>
+    :root {
+      --primary-pink: #ff6b81;
+      --secondary-pink: #ff85a2;
+      --soft-pink: #ffeef2;
+      --primary-blue: #4a90e2;
+      --secondary-blue: #6aa2e8;
+      --soft-blue: #eaf2fd;
+      --text-dark: #2c3e50;
+      --bg-glass: rgba(255, 255, 255, 0.85);
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffdde1 0%, #ee9ca7 50%, #a1c4fd 100%);
+      background-attachment: fixed;
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Partículas de Coração */
+    #particles-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 30px;
+      border: 2px solid rgba(255, 255, 255, 0.6);
+    }
+
+    h1.names {
+      font-family: 'Sacramento', cursive;
+      font-size: 3.5rem;
+      color: var(--primary-pink);
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .names span.blue { color: var(--primary-blue); }
+
+    /* Player de Música & Backup Controls */
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .music-btn, .action-btn {
+      background: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+      transition: transform 0.2s, background 0.2s;
+      font-size: 0.9rem;
+    }
+
+    .music-btn:hover, .action-btn:hover {
+      transform: translateY(-2px);
+      background: var(--soft-pink);
+    }
+
+    /* Contador de Dias */
+    .timer-container {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .timer-box {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px 20px;
+      border-radius: 15px;
+      min-width: 90px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    .timer-box .num {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--primary-pink);
+      display: block;
+    }
+
+    .timer-box .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #666;
+    }
+
+    .date-picker-btn {
+      background: transparent;
+      border: 1px dashed var(--primary-pink);
+      color: var(--primary-pink);
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-top: 15px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    /* Seções Estilizadas */
+    section {
+      background: var(--bg-glass);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius);
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255,255,255,0.8);
+    }
+
+    .section-title {
+      font-family: 'Caveat', cursive;
+      font-size: 2.2rem;
+      color: var(--text-dark);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Mural de Recados com Raspadinha */
+    .recados-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-bottom: 25px;
+      background: white;
+      padding: 20px;
+      border-radius: 15px;
+    }
+
+    .select-sender {
+      display: flex;
+      gap: 15px;
+    }
+
+    .radio-btn {
+      flex: 1;
+      position: relative;
+    }
+
+    .radio-btn input {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .radio-label {
+      display: block;
+      padding: 12px;
+      text-align: center;
+      border-radius: 10px;
+      border: 2px solid #ddd;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .radio-btn input[value="Eduarda"]:checked + .radio-label {
+      border-color: var(--primary-pink);
+      background: var(--soft-pink);
+      color: var(--primary-pink);
+    }
+
+    .radio-btn input[value="Gabriel"]:checked + .radio-label {
+      border-color: var(--primary-blue);
+      background: var(--soft-blue);
+      color: var(--primary-blue);
+    }
+
+    textarea {
+      width: 100%;
+      height: 90px;
+      padding: 12px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      resize: none;
+      font-size: 0.95rem;
+    }
+
+    .send-btn {
+      background: linear-gradient(45deg, var(--primary-pink), var(--primary-blue));
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: opacity 0.2s;
+    }
+
+    .send-btn:hover { opacity: 0.9; }
+
+    .recados-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .scratch-card {
+      position: relative;
+      border-radius: 15px;
+      padding: 20px;
+      min-height: 180px;
+      background: white;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Sinalização por Cor */
+    .scratch-card.to-gabriel {
+      border: 3px solid var(--primary-blue);
+      background: linear-gradient(to bottom right, #ffffff, var(--soft-blue));
+    }
+
+    .scratch-card.to-eduarda {
+      border: 3px solid var(--primary-pink);
+      background: linear-gradient(to bottom right, #ffffff, var(--soft-pink));
+    }
+
+    .card-badge {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .to-gabriel .card-badge {
+      background: var(--soft-blue);
+      color: var(--primary-blue);
+    }
+
+    .to-eduarda .card-badge {
+      background: var(--soft-pink);
+      color: var(--primary-pink);
+    }
+
+    .secret-text {
+      font-family: 'Caveat', cursive;
+      font-size: 1.4rem;
+      color: #333;
+      word-break: break-word;
+      line-height: 1.3;
+      padding: 10px 0;
+    }
+
+    .scratch-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      touch-action: none;
+      z-index: 5;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #888;
+      z-index: 2;
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 5px;
+    }
+
+    .card-actions button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.9rem;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+
+    .card-actions button:hover { opacity: 1; }
+
+    /* Pote de Mil Beijos Especiais */
+    .beijos-counter {
+      text-align: center;
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+    }
+
+    .beijos-count {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--primary-pink);
+      font-family: 'Caveat', cursive;
+    }
+
+    .beijos-form, .sonhos-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 20px;
+      background: white;
+      padding: 15px;
+      border-radius: 15px;
+    }
+
+    .beijos-form input, .sonhos-form input {
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+
+    .full-width { grid-column: span 2; }
+
+    .add-btn {
+      grid-column: span 2;
+      background: var(--primary-pink);
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 350px;
+      overflow-y: auto;
+    }
+
+    .list-item {
+      background: white;
+      padding: 12px 15px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-left: 4px solid var(--primary-pink);
+    }
+
+    .list-item-content h4 { font-size: 0.95rem; color: #333; }
+    .list-item-content p { font-size: 0.8rem; color: #666; }
+    .list-item-content .date { font-size: 0.7rem; color: #aaa; }
+
+    /* Pote de Sonhos */
+    .sonho-item {
+      border-left-color: var(--primary-blue);
+    }
+
+    .sonho-item.done {
+      background: #f0f0f0;
+      text-decoration: line-through;
+      opacity: 0.7;
+    }
+
+    /* Galeria Polaroid */
+    .polaroid-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .polaroid {
+      background: white;
+      padding: 12px 12px 25px 12px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transform: rotate(-2deg);
+      transition: transform 0.3s;
+      position: relative;
+    }
+
+    .polaroid:nth-child(even) { transform: rotate(2deg); }
+    .polaroid:hover { transform: scale(1.05) rotate(0deg); z-index: 10; }
+
+    .polaroid img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 4px;
+    }
+
+    .polaroid .caption {
+      font-family: 'Caveat', cursive;
+      font-size: 1.2rem;
+      text-align: center;
+      margin-top: 10px;
+      color: #444;
+    }
+
+    /* Modais */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      max-width: 450px;
+      width: 90%;
+      position: relative;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 15px; right: 15px;
+      background: none; border: none;
+      font-size: 1.2rem; cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: white;
+      font-size: 0.9rem;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+
+    @media (max-width: 600px) {
+      h1.names { font-size: 2.5rem; }
+      .beijos-form, .sonhos-form { grid-template-columns: 1fr; }
+      .full-width, .add-btn { grid-column: span 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Canvas do Fundo Interativo -->
+  <canvas id="particles-canvas"></canvas>
+
+  <div class="container">
+    <!-- Topo / Player e Ferramentas -->
+    <div class="top-bar">
+      <button class="music-btn" id="musicToggle">
+        🎵 <span>Tocar Música Romântica</span>
+      </button>
+
+      <div style="display: flex; gap: 10px;">
+        <button class="action-btn" id="exportDataBtn" title="Exportar dados do casal">💾 Salvar Dados</button>
+        <button class="action-btn" id="importDataBtn" title="Carregar dados em novo celular">📂 Carregar</button>
+        <input type="file" id="importFileInput" accept=".json" style="display: none;">
+      </div>
+    </div>
+
+    <!-- Cabeçalho Principal -->
+    <header>
+      <h1 class="names"><span class="pink">Eduarda</span> & <span class="blue">Gabriel</span></h1>
+      <p style="color: #666; font-size: 0.95rem;">Juntos construindo nossa história de amor infinitamente ❤️</p>
+      
+      <!-- Contador de Dias Juntos -->
+      <div class="timer-container">
+        <div class="timer-box"><span class="num" id="years">0</span><span class="label">Anos</span></div>
+        <div class="timer-box"><span class="num" id="days">0</span><span class="label">Dias</span></div>
+        <div class="timer-box"><span class="num" id="hours">0</span><span class="label">Horas</span></div>
+        <div class="timer-box"><span class="num" id="minutes">0</span><span class="label">Minutos</span></div>
+        <div class="timer-box"><span class="num" id="seconds">0</span><span class="label">Segundos</span></div>
+      </div>
+      <button class="date-picker-btn" id="changeDateBtn">⚙️ Alterar Data do Namoro</button>
+    </header>
+
+    <!-- 1. Mural de Recados com Raspadinha -->
+    <section id="recados-section">
+      <h2 class="section-title">💌 Mural de Recados Secretos (Raspadinha)</h2>
+      <p style="margin-bottom: 15px; font-size: 0.9rem; color: #555;">
+        Deixe um recadinho coberto com tinta raspável! <br>
+        • Se for para o <b style="color: var(--primary-blue)">Gabriel</b>, selecione <b>Eduarda</b> (A borda fica <b style="color: var(--primary-blue)">Azul</b>).<br>
+        • Se for para a <b style="color: var(--primary-pink)">Eduarda</b>, selecione <b>Gabriel</b> (A borda fica <b style="color: var(--primary-pink)">Rosa</b>).
+      </p>
+
+      <div class="recados-form">
+        <div class="select-sender">
+          <div class="radio-btn">
+            <input type="radio" id="senderEduarda" name="sender" value="Eduarda" checked>
+            <label for="senderEduarda" class="radio-label">De Eduarda (para Gabriel 💙)</label>
+          </div>
+          <div class="radio-btn">
+            <input type="radio" id="senderGabriel" name="sender" value="Gabriel">
+            <label for="senderGabriel" class="radio-label">De Gabriel (para Eduarda 💖)</label>
+          </div>
+        </div>
+        <textarea id="recadoText" placeholder="Escreva aqui seu recadinho especial ou segredo..."></textarea>
+        <button class="send-btn" id="addRecadoBtn">✨ Criar Recadinho com Raspadinha</button>
+      </div>
+
+      <div class="recados-grid" id="recadosGrid"></div>
+    </section>
+
+    <!-- 2. Pote de Mil Beijos Especiais -->
+    <section>
+      <h2 class="section-title">💋 Pote de Beijos Especiais</h2>
+      <div class="beijos-counter">
+        <p>Total de Beijos Especiais Registrados</p>
+        <div class="beijos-count" id="beijosCountDisplay">0 / 1000</div>
+      </div>
+
+      <form class="beijos-form" id="beijosForm">
+        <input type="text" id="beijoLocal" placeholder="Onde foi? (ex: Na praia no pôr do sol)" required class="full-width">
+        <input type="date" id="beijoData" required>
+        <input type="text" id="beijoHistoria" placeholder="Detalhe/História marcante..." required>
+        <button type="submit" class="add-btn">💋 Registrar Beijo Especial</button>
+      </form>
+
+      <div class="list-container" id="beijosList"></div>
+    </section>
+
+    <!-- 3. Pote de Sonhos do Casal -->
+    <section>
+      <h2 class="section-title">✨ Pote de Sonhos & Metas do Casal</h2>
+      
+      <form class="sonhos-form" id="sonhosForm">
+        <input type="text" id="sonhoTitulo" placeholder="Nosso Sonho (ex: Viajar para a Itália)" required class="full-width">
+        <input type="text" id="sonhoDetalhes" placeholder="Detalhes / Como vamos realizar..." class="full-width">
+        <button type="submit" class="add-btn" style="background: var(--primary-blue);">🌟 Guardar Sonho no Pote</button>
+      </form>
+
+      <div class="list-container" id="sonhosList"></div>
+    </section>
+
+    <!-- 4. Galeria Polaroid -->
+    <section>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2 class="section-title" style="margin-bottom: 0;">📸 Nossas Memórias em Foto</h2>
+        <button class="action-btn" id="addPhotoBtn">➕ Nova Foto</button>
+        <input type="file" id="photoInput" accept="image/*" style="display: none;">
+      </div>
+
+      <div class="polaroid-grid" id="polaroidGrid"></div>
+    </section>
+  </div>
+
+  <footer>
+    Feito com todo o amor do mundo para Eduarda & Gabriel Forever 💖
+  </footer>
+
+  <!-- Modal para Configurações/Edição -->
+  <div class="modal" id="genericModal">
+    <div class="modal-content">
+      <button class="close-modal" id="closeModalBtn">✕</button>
+      <h3 id="modalTitle" style="margin-bottom: 15px;">Título</h3>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
+  <!-- JavaScript Embutido -->
+  <script>
+    /* ==========================================================================
+       ESTADO GLOBAL & LOCALSTORAGE
+       ========================================================================== */
+    const STORAGE_KEY = 'eduarda_gabriel_love_app_data_v1';
+
+    let appData = {
+      startDate: '2023-01-01T00:00:00',
+      recados: [],
+      beijos: [],
+      sonhos: [],
+      photos: [
+        { id: '1', url: 'https://images.unsplash.com/photo-1518199266791-5375a83190b7?q=80&w=400', caption: 'Nosso Primeiro Encontro ❤️' },
+        { id: '2', url: 'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=400', caption: 'Viagem Inesquecível ✨' }
+      ]
+    };
+
+    function loadData() {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          appData = JSON.parse(saved);
+        } catch(e) { console.error("Erro ao carregar dados", e); }
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+    }
+
+    /* ==========================================================================
+       CONTADOR DE TEMPO JUNTOS
+       ========================================================================== */
+    function updateLoveTimer() {
+      const start = new Date(appData.startDate).getTime();
+      const now = new Date().getTime();
+      const diff = Math.max(0, now - start);
+
+      const seconds = Math.floor((diff / 1000) % 60);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const daysTotal = Math.floor(diff / (1000 * 60 * 60 * 24));
+      
+      const years = Math.floor(daysTotal / 365);
+      const remainingDays = daysTotal % 365;
+
+      document.getElementById('years').innerText = years;
+      document.getElementById('days').innerText = remainingDays;
+      document.getElementById('hours').innerText = hours;
+      document.getElementById('minutes').innerText = minutes;
+      document.getElementById('seconds').innerText = seconds;
+    }
+
+    /* ==========================================================================
+       MURAL DE RECADOS - RASPADINHA (CANVAS)
+       ========================================================================== */
+    function renderRecados() {
+      const grid = document.getElementById('recadosGrid');
+      grid.innerHTML = '';
+
+      appData.recados.forEach((recado) => {
+        const isToGabriel = recado.sender === 'Eduarda';
+        const card = document.createElement('div');
+        card.className = `scratch-card ${isToGabriel ? 'to-gabriel' : 'to-eduarda'}`;
+
+        const badgeText = isToGabriel ? 'Para: Gabriel 💙' : 'Para: Eduarda 💖';
+        const senderText = isToGabriel ? 'De: Eduarda' : 'De: Gabriel';
+
+        card.innerHTML = `
+          <div>
+            <span class="card-badge">${badgeText}</span>
+            <div class="secret-text">${escapeHtml(recado.text)}</div>
+          </div>
+          <div class="card-footer">
+            <span>${senderText} • ${recado.date}</span>
+            <div class="card-actions">
+              <button onclick="editRecado('${recado.id}')" title="Editar">✏️</button>
+            </div>
+          </div>
+          <canvas class="scratch-canvas"></canvas>
+        `;
+
+        grid.appendChild(card);
+
+        // Inicializar raspadinha no canvas se não tiver sido 100% raspado antes
+        const canvas = card.querySelector('.scratch-canvas');
+        if (!recado.scratched) {
+          initScratchCanvas(canvas, recado.id, isToGabriel);
+        } else {
+          canvas.style.display = 'none';
+        }
+      });
+    }
+
+    function initScratchCanvas(canvas, recadoId, isToGabriel) {
+      const ctx = canvas.getContext('2d');
+      const rect = canvas.getBoundingClientRect();
+      
+      canvas.width = canvas.parentElement.offsetWidth;
+      canvas.height = canvas.parentElement.offsetHeight;
+
+      // Desenhar camada de raspadinha metálica
+      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+      if (isToGabriel) {
+        gradient.addColorStop(0, '#b0c4de');
+        gradient.addColorStop(0.5, '#e6f0fa');
+        gradient.addColorStop(1, '#90b4ce');
+      } else {
+        gradient.addColorStop(0, '#f2b5d4');
+        gradient.addColorStop(0.5, '#fde2e4');
+        gradient.addColorStop(1, '#e8a5c8');
+      }
+
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Texto no topo da raspadinha
+      ctx.fillStyle = '#444';
+      ctx.font = 'bold 16px Poppins';
+      ctx.textAlign = 'center';
+      ctx.fillText('✨ Raspe aqui com o dedo/mouse ✨', canvas.width / 2, canvas.height / 2);
+
+      let isDrawing = false;
+
+      function scratch(e) {
+        if (!isDrawing) return;
+        const rect = canvas.getBoundingClientRect();
+        const x = (e.clientX || e.touches[0].clientX) - rect.left;
+        const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.beginPath();
+        ctx.arc(x, y, 20, 0, Math.PI * 2);
+        ctx.fill();
+
+        checkScratchPercentage();
+      }
+
+      function checkScratchPercentage() {
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        let pixels = imageData.data;
+        let transparentPixels = 0;
+
+        for (let i = 0; i < pixels.length; i += 16) {
+          if (pixels[i + 3] === 0) transparentPixels++;
+        }
+
+        const percentage = (transparentPixels / (pixels.length / 16)) * 100;
+        if (percentage > 45) {
+          canvas.style.transition = 'opacity 0.5s';
+          canvas.style.opacity = '0';
+          setTimeout(() => {
+            canvas.style.display = 'none';
+            const item = appData.recados.find(r => r.id === recadoId);
+            if (item) { item.scratched = true; saveData(); }
+          }, 500);
+        }
+      }
+
+      canvas.addEventListener('mousedown', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('mousemove', scratch);
+      canvas.addEventListener('mouseup', () => isDrawing = false);
+
+      canvas.addEventListener('touchstart', (e) => { isDrawing = true; scratch(e); });
+      canvas.addEventListener('touchmove', scratch);
+      canvas.addEventListener('touchend', () => isDrawing = false);
+    }
+
+    document.getElementById('addRecadoBtn').addEventListener('click', () => {
+      const text = document.getElementById('recadoText').value.trim();
+      const sender = document.querySelector('input[name="sender"]:checked').value;
+
+      if (!text) return alert('Escreva uma mensagem antes de enviar!');
+
+      const newRecado = {
+        id: Date.now().toString(),
+        sender: sender,
+        text: text,
+        date: new Date().toLocaleDateString('pt-BR'),
+        scratched: false
+      };
+
+      appData.recados.unshift(newRecado);
+      saveData();
+      renderRecados();
+      document.getElementById('recadoText').value = '';
+    });
+
+    window.editRecado = function(id) {
+      const recado = appData.recados.find(r => r.id === id);
+      if (!recado) return;
+
+      const newText = prompt('Editar recado:', recado.text);
+      if (newText !== null && newText.trim() !== '') {
+        recado.text = newText.trim();
+        saveData();
+        renderRecados();
+      }
+    };
+
+    /* ==========================================================================
+       POTE DE MIL BEIJOS ESPECIAIS
+       ========================================================================== */
+    function renderBeijos() {
+      const list = document.getElementById('beijosList');
+      const countDisplay = document.getElementById('beijosCountDisplay');
+      
+      list.innerHTML = '';
+      countDisplay.innerText = `${appData.beijos.length} / 1000`;
+
+      appData.beijos.forEach((beijo) => {
+        const item = document.createElement('div');
+        item.className = 'list-item';
+        item.innerHTML = `
+          <div class="list-item-content">
+            <h4>💋 Beijo #${beijo.number} — ${escapeHtml(beijo.local)}</h4>
+            <p>${escapeHtml(beijo.historia)}</p>
+            <span class="date">${beijo.data}</span>
+          </div>
+          <div>
+            <button onclick="editBeijo('${beijo.id}')" style="border:none;background:none;cursor:pointer;">✏️</button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    document.getElementById('beijosForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const local = document.getElementById('beijoLocal').value.trim();
+      const data = document.getElementById('beijoData').value;
+      const historia = document.getElementById('beijoHistoria').value.trim();
+
+      const newBeijo = {
+        id: Date.now().toString(),
+        number: appData.beijos.length + 1,
+        local,
+        data,
+        historia
+      };
+
+      appData.beijos.unshift(newBeijo);
+      saveData();
+      renderBeijos();
+      document.getElementById('beijosForm').reset();
+    });
+
+    window.editBeijo = function(id) {
+      const beijo = appData.beijos.find(b => b.id === id);
+      if (!beijo) return;
+
+      const newLocal = prompt('Editar local do beijo:', beijo.local);
+      const newHistoria = prompt('Editar história do beijo:', beijo.historia);
+
+      if (newLocal !== null) beijo.local = newLocal;
+      if (newHistoria !== null) beijo.historia = newHistoria;
+
+      saveData();
+      renderBeijos();
+    };
+
+    /* ==========================================================================
+       POTE DE SONHOS
+       ========================================================================== */
+    function renderSonhos() {
+      const list = document.getElementById('sonhosList');
+      list.innerHTML = '';
+
+      appData.sonhos.forEach((sonho) => {
+        const item = document.createElement('div');
+        item.className = `list-item sonho-item ${sonho.done ? 'done' : ''}`;
+        item.innerHTML = `
+          <div class="list-item-content">
+            <h4>✨ ${escapeHtml(sonho.titulo)}</h4>
+            <p>${escapeHtml(sonho.detalhes || '')}</p>
+          </div>
+          <div style="display:flex; gap: 8px; align-items:center;">
+            <input type="checkbox" ${sonho.done ? 'checked' : ''} onchange="toggleSonho('${sonho.id}')">
+            <button onclick="editSonho('${sonho.id}')" style="border:none;background:none;cursor:pointer;">✏️</button>
+          </div>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    document.getElementById('sonhosForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const titulo = document.getElementById('sonhoTitulo').value.trim();
+      const detalhes = document.getElementById('sonhoDetalhes').value.trim();
+
+      const newSonho = {
+        id: Date.now().toString(),
+        titulo,
+        detalhes,
+        done: false
+      };
+
+      appData.sonhos.unshift(newSonho);
+      saveData();
+      renderSonhos();
+      document.getElementById('sonhosForm').reset();
+    });
+
+    window.toggleSonho = function(id) {
+      const sonho = appData.sonhos.find(s => s.id === id);
+      if (sonho) {
+        sonho.done = !sonho.done;
+        saveData();
+        renderSonhos();
+      }
+    };
+
+    window.editSonho = function(id) {
+      const sonho = appData.sonhos.find(s => s.id === id);
+      if (!sonho) return;
+
+      const newTitulo = prompt('Editar título do sonho:', sonho.titulo);
+      const newDetalhes = prompt('Editar detalhes do sonho:', sonho.detalhes);
+
+      if (newTitulo !== null) sonho.titulo = newTitulo;
+      if (newDetalhes !== null) sonho.detalhes = newDetalhes;
+
+      saveData();
+      renderSonhos();
+    };
+
+    /* ==========================================================================
+       GALERIA POLAROID
+       ========================================================================== */
+    function renderPhotos() {
+      const grid = document.getElementById('polaroidGrid');
+      grid.innerHTML = '';
+
+      appData.photos.forEach((photo) => {
+        const card = document.createElement('div');
+        card.className = 'polaroid';
+        card.innerHTML = `
+          <img src="${photo.url}" alt="Foto do casal">
+          <div class="caption">${escapeHtml(photo.caption)}</div>
+          <button onclick="editPhotoCaption('${photo.id}')" style="position:absolute; top:5px; right:5px; border:none; background:rgba(255,255,255,0.8); border-radius:50%; width:25px; height:25px; cursor:pointer;">✏️</button>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    document.getElementById('addPhotoBtn').addEventListener('click', () => {
+      document.getElementById('photoInput').click();
+    });
+
+    document.getElementById('photoInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const caption = prompt('Legenda para esta foto:', 'Nosso momento ❤️') || 'Nosso momento ❤️';
+        appData.photos.unshift({
+          id: Date.now().toString(),
+          url: event.target.result,
+          caption: caption
+        });
+        saveData();
+        renderPhotos();
+      };
+      reader.readAsDataURL(file);
+    });
+
+    window.editPhotoCaption = function(id) {
+      const photo = appData.photos.find(p => p.id === id);
+      if (!photo) return;
+
+      const newCaption = prompt('Editar legenda:', photo.caption);
+      if (newCaption !== null) {
+        photo.caption = newCaption;
+        saveData();
+        renderPhotos();
+      }
+    };
+
+    /* ==========================================================================
+       PARTÍCULAS DE CORAÇÃO NO CANVA DE FUNDO
+       ========================================================================== */
+    function initParticles() {
+      const canvas = document.getElementById('particles-canvas');
+      const ctx = canvas.getContext('2d');
+      let particles = [];
+
+      function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+      window.addEventListener('resize', resize);
+      resize();
+
+      class Heart {
+        constructor() {
+          this.reset();
+        }
+        reset() {
+          this.x = Math.random() * canvas.width;
+          this.y = canvas.height + Math.random() * 20;
+          this.size = Math.random() * 12 + 8;
+          this.speedY = Math.random() * 1.5 + 0.5;
+          this.opacity = Math.random() * 0.5 + 0.3;
+          this.color = Math.random() > 0.5 ? '#ff6b81' : '#4a90e2';
+        }
+        update() {
+          this.y -= this.speedY;
+          if (this.y < -20) this.reset();
+        }
+        draw() {
+          ctx.save();
+          ctx.globalAlpha = this.opacity;
+          ctx.fillStyle = this.color;
+          ctx.beginPath();
+          const topCurveHeight = this.size * 0.3;
+          ctx.moveTo(this.x, this.y + topCurveHeight);
+          ctx.bezierCurveTo(this.x, this.y, this.x - this.size / 2, this.y, this.x - this.size / 2, this.y + topCurveHeight);
+          ctx.bezierCurveTo(this.x - this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x, this.y + this.size, this.x, this.y + this.size);
+          ctx.bezierCurveTo(this.x, this.y + (this.size + topCurveHeight) / 2, this.x + this.size / 2, this.y + (this.size + topCurveHeight) / 2, this.x + this.size / 2, this.y + topCurveHeight);
+          ctx.bezierCurveTo(this.x + this.size / 2, this.y, this.x, this.y, this.x, this.y + topCurveHeight);
+          ctx.closePath();
+          ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      for (let i = 0; i < 35; i++) {
+        particles.push(new Heart());
+      }
+
+      function animate() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    /* ==========================================================================
+       PLAYER DE MÚSICA DE FUNDO (WEB AUDIO API SINTETIZADOR SUAVE)
+       ========================================================================== */
+    let audioCtx = null;
+    let isPlaying = false;
+    let timerId = null;
+
+    function playRomanticMelody() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      const notes = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23]; // C4, E4, G4, C5, A4, F4
+      let index = 0;
+
+      function playNote() {
+        if (!isPlaying) return;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[index], audioCtx.currentTime);
+
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 1.5);
+
+        index = (index + 1) % notes.length;
+      }
+
+      timerId = setInterval(playNote, 800);
+    }
+
+    document.getElementById('musicToggle').addEventListener('click', function() {
+      isPlaying = !isPlaying;
+      if (isPlaying) {
+        this.innerHTML = '⏸️ <span>Pausar Música</span>';
+        playRomanticMelody();
+      } else {
+        this.innerHTML = '🎵 <span>Tocar Música Romântica</span>';
+        if (timerId) clearInterval(timerId);
+      }
+    });
+
+    /* ==========================================================================
+       UTILITÁRIOS, EXPORTAÇÃO E IMPORTAÇÃO
+       ========================================================================== */
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.innerText = text;
+      return div.innerHTML;
+    }
+
+    // Modal Generic
+    const modal = document.getElementById('genericModal');
+    const closeModalBtn = document.getElementById('closeModalBtn');
+    closeModalBtn.onclick = () => modal.style.display = 'none';
+
+    document.getElementById('changeDateBtn').onclick = () => {
+      document.getElementById('modalTitle').innerText = 'Alterar Data do Namoro';
+      document.getElementById('modalBody').innerHTML = `
+        <input type="datetime-local" id="newStartDate" style="width:100%; padding:10px; margin-bottom:15px;" value="${appData.startDate.substring(0,16)}">
+        <button class="send-btn" id="saveDateBtn">Salvar Data</button>
+      `;
+      modal.style.display = 'flex';
+
+      document.getElementById('saveDateBtn').onclick = () => {
+        const val = document.getElementById('newStartDate').value;
+        if (val) {
+          appData.startDate = val;
+          saveData();
+          updateLoveTimer();
+          modal.style.display = 'none';
+        }
+      };
+    };
+
+    // Exportar Dados JSON
+    document.getElementById('exportDataBtn').onclick = () => {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData));
+      const downloadAnchor = document.createElement('a');
+      downloadAnchor.setAttribute("href", dataStr);
+      downloadAnchor.setAttribute("download", `eduarda_gabriel_amor_dados.json`);
+      document.body.appendChild(downloadAnchor);
+      downloadAnchor.click();
+      downloadAnchor.remove();
+    };
+
+    // Importar Dados JSON
+    document.getElementById('importDataBtn').onclick = () => {
+      document.getElementById('importFileInput').click();
+    };
+
+    document.getElementById('importFileInput').onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          const imported = JSON.parse(event.target.result);
+          if (imported && imported.startDate) {
+            appData = imported;
+            saveData();
+            initApp();
+            alert('Dados do casal carregados com sucesso!');
+          }
+        } catch(err) {
+          alert('Arquivo JSON inválido!');
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    /* ==========================================================================
+       INICIALIZAÇÃO DO APP
+       ========================================================================== */
+    function initApp() {
+      loadData();
+      updateLoveTimer();
+      setInterval(updateLoveTimer, 1000);
+      renderRecados();
+      renderBeijos();
+      renderSonhos();
+      renderPhotos();
+      initParticles();
+    }
+
+    window.onload = initApp;
+  </script>
+</body>
+</html>
